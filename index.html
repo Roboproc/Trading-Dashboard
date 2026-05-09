@@ -4717,7 +4717,7 @@ function applyEOD(){
       if(t.ticker!==tk) return false;
       if(isOpt){
         if(t.mode!=='opt') return false;
-        return t.cp===m.cp && Math.abs(+t.strike-+m.strike)<0.01 && t.expiry===m.expiry;
+        return (t.cp||'').toLowerCase()===(m.cp||'').toLowerCase() && Math.abs(+t.strike-+m.strike)<0.01 && t.expiry===m.expiry;
       }
       return t.mode==='stock';
     });
@@ -6766,7 +6766,13 @@ function renderDash(){
     if(!t.marks||!t.marks.length)return;
     // Marks are stored sorted by date ascending.
     const marksInScope=t.marks.filter(m=>m.date>=bounds.from&&m.date<=bounds.to&&m.pnl!=null);
-    if(!marksInScope.length)return;
+    if(!marksInScope.length){
+      // Fallback: no marks exist for this scope window (e.g. "Today" selected but latest
+      // marks are yesterday's EOD). Use the delta between the two most recent marks so the
+      // P&L bar always reflects the most recent available movement rather than showing $0.
+      if(pnlScope==='today'){const mk=latestMark(t),pk=prevMark(t);if(mk&&pk&&mk.pnl!=null&&pk.pnl!=null)todayUnrealDelta+=(mk.pnl-pk.pnl);}
+      return;
+    }
     const last=marksInScope[marksInScope.length-1];
     // Baseline = latest mark strictly before scope.from (preferred), else first mark in scope itself
     const priorOutside=t.marks.filter(m=>m.date<bounds.from&&m.pnl!=null);
@@ -6803,7 +6809,7 @@ function renderDash(){
   let ctTxt=todayT.length+' closed · '+openedInScope+' opened · '+markedInScope+' marked '+scopeWord;
   // If scope==today and NO marks exist for today, surface a helpful hint instead of silent $0
   if(pnlScope==='today' && markedInScope===0 && todayT.length===0){
-    ctTxt+=' — <span style="color:var(--ylo)">no EOD marks for '+bounds.to+' yet; load tonight to see today\'s Δ</span>';
+    ctTxt+=' — <span style="color:var(--ylo)">no marks for today yet · showing latest EOD Δ</span>';
   }
   const ctEl=document.getElementById('dash-trade-ct');
   if(ctEl)ctEl.innerHTML=ctTxt; else set('dash-trade-ct',ctTxt);
