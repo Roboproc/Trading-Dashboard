@@ -604,6 +604,14 @@ select option:checked{background:var(--blu);color:#fff;}
   .sec-hd{font-size:7px;letter-spacing:2px;}
   /* Calendar and charts scale with container */
   svg{max-width:100%;height:auto;}
+  /* ── Mobile overflow fixes ──────────────────
+     hero-stats must wrap on narrow screens (base CSS has flex-wrap:nowrap) */
+  .hero-stats{flex-wrap:wrap;}
+  /* Open Positions: hide sector + industry tag columns (they alone add 170px of min-width)
+     so the row fits inside a single-column card on a 375px iPhone */
+  .op-sec-col,.op-hdr-sec,.op-ind-col,.op-hdr-ind{display:none!important;}
+  /* Watchlist: hide sector + industry tag columns for the same reason (192px of fixed width) */
+  .wl-sec-col,.wl-ind-col{display:none!important;}
 }
 @media(max-width:420px){
   /* Extra-narrow iPhones: push hstat cards to 2 wide */
