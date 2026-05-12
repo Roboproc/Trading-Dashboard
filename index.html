@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'&gt;&lt;rect width='180' height='180' rx='36' fill='%23070b0f'/&gt;&lt;text x='50%25' y='58%25' text-anchor='middle' font-family='Georgia,serif' font-size='92' font-weight='700' fill='%232ee89a'&gt;A&lt;/text&gt;&lt;/svg&gt;">
 <style>
 /* Respect iOS safe-area insets so the topbar doesn't get eaten by the notch */
-body{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);overflow-x:hidden;}
+body{padding-bottom:env(safe-area-inset-bottom);overflow-x:clip;}
 /* ── TOKENS ─────────────────────────────── */
 :root {
   --bg0:#070b0f;--bg1:#0b1017;--bg2:#0f1620;--bg3:#131d28;--bg4:#18242f;
@@ -30,7 +30,7 @@ body{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bot
   --r:6px;--r2:10px;--sh:0 4px 24px rgba(0,0,0,.4);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{height:100%;background:var(--bg0);color:var(--c0);font-family:var(--f0);overflow-x:hidden;}
+html,body{height:100%;background:var(--bg0);color:var(--c0);font-family:var(--f0);overflow-x:clip;}
 ::selection{background:rgba(46,232,154,.25);}
 ::-webkit-scrollbar{width:5px;height:5px;}
 ::-webkit-scrollbar-track{background:var(--bg1);}
@@ -45,16 +45,17 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 /* ── TOPBAR ──────────────────────────────── */
 #topbar{position:sticky;top:0;z-index:200;background:rgba(7,11,15,.96);
   backdrop-filter:blur(16px);border-bottom:1px solid var(--ln);
-  display:flex;align-items:stretch;height:50px;}
+  display:flex;align-items:stretch;height:50px;overflow:visible;}
 .logo{display:flex;align-items:center;padding:0 22px;border-right:1px solid var(--ln);gap:10px;flex-shrink:0;}
 .logo-mark{font-family:var(--f0);font-size:17px;font-weight:800;letter-spacing:3px;color:var(--c0);}
 .logo-mark span{color:var(--grn);}
 .logo-ver{font-family:var(--f1);font-size:8px;letter-spacing:2px;color:var(--c3);}
-nav{display:flex;flex:1;overflow-x:auto;}
+nav{display:flex;flex:1;overflow-x:auto;overflow-y:clip;flex-wrap:nowrap;}
 nav::-webkit-scrollbar{height:0;}
 .tab{font-family:var(--f1);font-size:9px;letter-spacing:2px;text-transform:uppercase;
   color:var(--c3);padding:0 20px;cursor:pointer;border:none;background:none;
-  border-bottom:2px solid transparent;white-space:nowrap;transition:.18s;display:flex;align-items:center;gap:7px;}
+  border-bottom:2px solid transparent;white-space:nowrap;transition:.18s;display:flex;align-items:center;gap:7px;
+  flex-shrink:0;height:50px;}
 .tab svg{opacity:.5;transition:.18s;}
 .tab:hover{color:var(--c1);}
 .tab.on{color:var(--grn);border-bottom-color:var(--grn);}
@@ -512,6 +513,85 @@ select option:checked{background:var(--blu);color:#fff;}
 .ec-box{width:16px;height:16px;border-radius:3px;border:1px solid var(--ln2);flex-shrink:0;margin-top:1px;
   display:flex;align-items:center;justify-content:center;font-size:9px;transition:.15s;}
 .ec-item.done .ec-box{background:var(--grn);border-color:var(--grn);color:#000;}
+
+/* ── TRADING ADDICTS PLAYBOOK ─────────────── */
+.ta-steps{display:flex;gap:5px;margin-bottom:18px;flex-wrap:wrap;}
+.ta-step{font-family:var(--f1);font-size:8px;letter-spacing:1.5px;text-transform:uppercase;
+  padding:7px 14px;border-radius:var(--r);cursor:pointer;border:1px solid var(--ln2);
+  background:none;color:var(--c3);transition:.18s;white-space:nowrap;}
+.ta-step:hover{color:var(--c1);border-color:var(--ln3);}
+.ta-step.on{background:var(--bg3);color:var(--grn);border-color:var(--grn);}
+.ta-panel{display:none;}
+.ta-panel.on{display:block;animation:fadeUp .2s ease;}
+.ta-step-title{font-family:var(--f0);font-size:18px;font-weight:700;margin-bottom:4px;}
+.ta-step-sub{font-family:var(--f1);font-size:8px;letter-spacing:2px;color:var(--c3);text-transform:uppercase;margin-bottom:16px;}
+.ta-table{width:100%;border-collapse:collapse;margin-bottom:12px;}
+.ta-table th{font-family:var(--f1);font-size:7px;letter-spacing:2px;color:var(--c3);text-transform:uppercase;
+  padding:8px 12px;border-bottom:1px solid var(--ln);text-align:left;background:var(--bg3);}
+.ta-table td{padding:9px 12px;border-bottom:1px solid rgba(28,45,62,.4);font-family:var(--f1);font-size:10px;}
+.ta-table tr:last-child td{border-bottom:none;}
+.ta-table tr:hover td{background:rgba(28,45,62,.15);}
+.patt-group{margin-bottom:18px;}
+.patt-group-hd{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-family:var(--f1);font-size:9px;letter-spacing:1.5px;color:var(--c2);}
+.patt-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:8px;}
+.patt-card{background:var(--bg3);border:1px solid var(--ln);border-radius:var(--r);padding:12px;cursor:pointer;transition:.18s;}
+.patt-card:hover{border-color:var(--ln3);background:var(--bg4);}
+.patt-card.open{border-color:var(--grn);background:var(--bg4);}
+.patt-name{font-family:var(--f1);font-size:10px;font-weight:700;color:var(--c1);margin-bottom:3px;}
+.patt-type-tag{font-family:var(--f1);font-size:8px;color:var(--c3);letter-spacing:1px;}
+.patt-detail{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--ln);}
+.patt-card.open .patt-detail{display:block;}
+.patt-trigger-lbl{font-family:var(--f1);font-size:7px;letter-spacing:1.5px;text-transform:uppercase;color:var(--c3);margin-bottom:3px;}
+.patt-trigger{font-family:var(--f1);font-size:9px;color:var(--grn);line-height:1.5;}
+.risk-badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+.risk-badge{padding:10px 16px;border-radius:var(--r);font-family:var(--f1);font-size:9px;line-height:1.7;flex:1;min-width:240px;}
+.risk-badge.on{background:var(--grn3);border:1px solid var(--grn);}
+.risk-badge.off{background:var(--red3);border:1px solid var(--red2);}
+.risk-badge .rb-lbl{letter-spacing:2px;text-transform:uppercase;font-size:7px;margin-bottom:3px;}
+.risk-badge.on .rb-lbl{color:var(--grn);}
+.risk-badge.off .rb-lbl{color:var(--red);}
+.risk-badge .rb-tickers{color:var(--tl);font-size:9px;margin-bottom:4px;}
+.risk-badge .rb-action{font-size:10px;}
+.risk-badge.on .rb-action{color:var(--grn);}
+.risk-badge.off .rb-action{color:var(--red-hi);}
+.mc-item{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:var(--r);
+  background:var(--bg3);border:1px solid var(--ln);margin-bottom:8px;cursor:pointer;transition:.15s;}
+.mc-item.done{border-color:var(--grn);background:rgba(46,232,154,.04);}
+.mc-item:hover{background:var(--bg4);}
+.mc-num{width:28px;height:28px;border-radius:50%;border:2px solid var(--ln2);display:flex;align-items:center;
+  justify-content:center;font-family:var(--f1);font-size:10px;color:var(--c3);flex-shrink:0;transition:.15s;}
+.mc-item.done .mc-num{background:var(--grn);border-color:var(--grn);color:#000;font-weight:700;}
+.mc-q{font-family:var(--f0);font-size:12px;font-weight:700;margin-bottom:3px;}
+.mc-hint{font-family:var(--f1);font-size:9px;color:var(--c3);}
+.mc-status{text-align:center;padding:14px;border-radius:var(--r);margin-top:12px;font-family:var(--f1);font-size:10px;letter-spacing:1.5px;}
+.mc-status.go{background:var(--grn3);color:var(--grn);border:1px solid var(--grn);}
+.mc-status.nogo{background:var(--red3);color:var(--red);border:1px solid var(--red2);}
+.ta-quote{background:var(--bg3);border-left:3px solid var(--grn);padding:14px 18px;
+  border-radius:0 var(--r) var(--r) 0;margin-bottom:10px;font-family:var(--f0);font-size:14px;
+  font-style:italic;color:var(--c1);line-height:1.6;}
+.ta-math{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;}
+.ta-math-stat{flex:1;min-width:130px;background:var(--bg3);border:1px solid var(--ln);border-radius:var(--r);padding:14px;text-align:center;}
+.ta-math-val{font-family:var(--f0);font-size:22px;font-weight:700;margin-bottom:3px;}
+.ta-math-lbl{font-family:var(--f1);font-size:8px;letter-spacing:1.5px;color:var(--c3);}
+.ta-warn{background:var(--red3);border:1px solid var(--red2);border-radius:var(--r);padding:10px 14px;
+  font-family:var(--f1);font-size:9px;color:var(--red-hi);line-height:1.5;margin-top:10px;}
+.ta-note{background:var(--ylo3);border:1px solid rgba(245,197,66,.3);border-radius:var(--r);padding:10px 14px;
+  font-family:var(--f1);font-size:9px;color:var(--ylo);line-height:1.5;margin-top:10px;}
+.ts-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;}
+.ts-num{width:26px;height:26px;border-radius:50%;background:var(--bg4);border:1px solid var(--ln2);
+  display:flex;align-items:center;justify-content:center;font-family:var(--f1);font-size:10px;
+  color:var(--grn);flex-shrink:0;margin-top:18px;}
+.ts-field{flex:1;}
+.ts-field label{font-family:var(--f1);font-size:7px;letter-spacing:2px;text-transform:uppercase;color:var(--c3);display:block;margin-bottom:4px;}
+.patt-avoid-list{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+.patt-avoid-tag{padding:4px 10px;border-radius:var(--r);font-family:var(--f1);font-size:9px;}
+.patt-avoid-tag.warn{background:var(--red3);color:var(--red-hi);border:1px solid var(--red2);}
+.patt-avoid-tag.never{background:rgba(200,80,110,.08);color:var(--c3);border:1px solid var(--ln);text-decoration:line-through;}
+.patt-svg{display:block;width:100%;border-radius:4px;background:var(--bg1);margin-bottom:10px;}
+.patt-card-v2{background:var(--bg3);border:1px solid var(--ln);border-radius:var(--r);padding:12px;transition:.18s;}
+.patt-card-v2:hover{border-color:var(--ln3);background:var(--bg4);}
+.pb-section-hd{font-family:var(--f1);font-size:8px;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--c3);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--ln);}
 
 /* Sizer */
 .sizer-out{text-align:center;padding:16px 0;}
@@ -1002,7 +1082,7 @@ select option:checked{background:var(--blu);color:#fff;}
     </div>
     <div class="fgrid fg2">
       <div class="fg"><label>Initial Risk $ (override — blank = auto from stop)</label><input type="number" id="sf-risk" placeholder="auto: (entry − stop) × shares" step="0.01" oninput="sCalc()"></div>
-      <div class="fg"><label>Setup</label><select id="sf-setup"><option>Momentum Breakout</option><option>EMA Pullback</option><option>VWAP Reclaim</option><option>ORB</option><option>Coil</option><option>Flag</option><option>Bottom of Broadening</option><option>Middle of Broadening</option><option>Other</option></select></div>
+      <div class="fg"><label>Setup</label><select id="sf-setup"><optgroup label="── Playbook Patterns ──"><option>Volume Pocket / Ledge</option><option>Bull Flag</option><option>Ascending Triangle</option><option>Cup with Handle</option><option>Rectangle Breakout</option><option>Double Bottom</option><option>Falling Wedge</option><option>Broadening Formation</option><option>Rounding Bottom</option><option>Symmetrical Triangle / Coil</option><option>Price Channel</option></optgroup><optgroup label="── Other Setups ──"><option>Momentum Breakout</option><option>EMA Pullback</option><option>VWAP Reclaim</option><option>ORB</option><option>Other</option></optgroup></select></div>
     </div>
     <div class="fgrid fg2">
       <div class="fg"><label>Emotion at Entry</label><select id="sf-emo"><option>Neutral</option><option>Confident</option><option>Patient</option><option>Anxious</option><option>FOMO</option><option>Revenge</option></select></div>
@@ -1047,7 +1127,7 @@ select option:checked{background:var(--blu);color:#fff;}
     </div>
     <div class="fgrid fg3">
       <div class="fg"><label>Underlying Price at Entry</label><input type="number" id="of-ul" placeholder="88.50" step="0.01"></div>
-      <div class="fg"><label>Setup</label><select id="of-setup"><option>Momentum Breakout</option><option>EMA Pullback</option><option>VWAP Reclaim</option><option>ORB</option><option>Coil</option><option>Flag</option><option>Bottom of Broadening</option><option>Middle of Broadening</option><option>Earnings Play</option><option>Other</option></select></div>
+      <div class="fg"><label>Setup</label><select id="of-setup"><optgroup label="── Playbook Patterns ──"><option>Volume Pocket / Ledge</option><option>Bull Flag</option><option>Ascending Triangle</option><option>Cup with Handle</option><option>Rectangle Breakout</option><option>Double Bottom</option><option>Falling Wedge</option><option>Broadening Formation</option><option>Rounding Bottom</option><option>Symmetrical Triangle / Coil</option><option>Price Channel</option></optgroup><optgroup label="── Other Setups ──"><option>Momentum Breakout</option><option>EMA Pullback</option><option>VWAP Reclaim</option><option>ORB</option><option>Earnings Play</option><option>Other</option></optgroup></select></div>
       <div class="fg"><label>Emotion at Entry</label><select id="of-emo"><option>Neutral</option><option>Confident</option><option>Patient</option><option>Anxious</option><option>FOMO</option><option>Revenge</option></select></div>
     </div>
     <div class="fgrid fg2">
@@ -1258,6 +1338,7 @@ select option:checked{background:var(--blu);color:#fff;}
             <span><span style="display:inline-block;width:10px;height:2px;background:var(--red);margin-right:5px;vertical-align:middle"></span>Balance</span>
             <span><span style="display:inline-block;width:10px;height:2px;background:var(--grn);margin-right:5px;vertical-align:middle"></span>P&L</span>
           </div>
+          <button class="btn btn-s btn-sm" onclick="openLogBalance()" title="Log your current Webull account balance to anchor the Balance chart for today" style="border-color:var(--red);color:var(--red);">📌 Log Balance</button>
         </div>
       </div>
       <div id="acct-chart" style="width:100%;height:320px;margin-top:8px;"></div>
@@ -1424,6 +1505,7 @@ select option:checked{background:var(--blu);color:#fff;}
 <!-- ══ PAGE: PLAYBOOKS ══════════════════════ -->
 <div class="page" id="page-system">
 
+  <!-- Row 1: Position Sizer + Top-Down Analysis -->
   <div class="g2" style="margin-bottom:16px;">
 
     <!-- Position Sizer -->
@@ -1432,7 +1514,7 @@ select option:checked{background:var(--blu);color:#fff;}
       <div class="card-title">Position Sizer</div>
       <div class="fgrid fg2">
         <div class="fg"><label>Capital $ <span style="opacity:.6;font-size:8px">(starting)</span></label><input type="number" id="ps-cap" value="12000" oninput="onCapChange()"></div>
-        <div class="fg"><label>Risk % per Trade</label><input type="number" id="ps-rp" value="1" step="0.1" oninput="calcSize()"></div>
+        <div class="fg"><label>Risk % per Trade <span style="opacity:.5;font-size:8px">(5 = 5%)</span></label><input type="number" id="ps-rp" value="1" step="0.5" min="0.1" max="100" placeholder="e.g. 2" oninput="calcSize()"></div>
         <div class="fg"><label>Entry $</label><input type="number" id="ps-en" placeholder="50.00" step="0.01" oninput="calcSize()"></div>
         <div class="fg"><label>Stop $</label><input type="number" id="ps-st" placeholder="48.50" step="0.01" oninput="calcSize()"></div>
         <div class="fg"><label>Target $</label><input type="number" id="ps-tg" placeholder="53.00" step="0.01" oninput="calcSize()"></div>
@@ -1449,153 +1531,481 @@ select option:checked{background:var(--blu);color:#fff;}
       </div>
     </div>
 
-    <!-- Options Greeks -->
+    <!-- Top-Down Analysis -->
     <div class="card">
-      <div class="card-top-line" style="background:linear-gradient(90deg,var(--prp),transparent)"></div>
-      <div class="card-title">Options Greeks — Rob's Rules</div>
-      <table class="gk-table">
-        <thead><tr><th>Greek</th><th>Meaning</th><th>Your Rule</th></tr></thead>
+      <div class="card-top-line" style="background:linear-gradient(90deg,var(--grn),transparent)"></div>
+      <div class="card-title">Top-Down Analysis — Do This First</div>
+      <table class="ta-table" style="margin-bottom:12px">
+        <thead><tr><th>Step</th><th>What to Check</th><th>What to Ask</th></tr></thead>
         <tbody>
-          <tr><td class="txt-grn">Delta</td><td class="txt-c2">$ move per $1 underlying</td><td class="txt-c1">0.40–0.60 swing · 0.65+ ITM high-prob</td></tr>
-          <tr><td class="txt-red">Gamma</td><td class="txt-c2">Delta acceleration</td><td class="txt-c1">Spikes near expiry — avoid &lt; 7 DTE buys</td></tr>
-          <tr><td class="txt-prp">Theta</td><td class="txt-c2">Daily time decay cost</td><td class="txt-c1">Never buy &lt; 21 DTE for swings. Prefer ≥ 30.</td></tr>
-          <tr><td class="txt-tl">Vega</td><td class="txt-c2">IV sensitivity per 1%</td><td class="txt-c1">Buy when IVR &lt; 30%. Avoid post-event crush.</td></tr>
-          <tr><td class="txt-ylo">IV Rank</td><td class="txt-c2">Current IV percentile</td><td class="txt-c1">Buy &lt; 30 IVR · Sell premium &gt; 60 IVR</td></tr>
+          <tr><td class="txt-grn" style="font-weight:700;white-space:nowrap">1 · Broad Indices</td><td><span class="txt-tl" style="font-size:9px">$SPY $QQQ $DJI $IWM</span></td><td style="font-size:9px">Trend direction? Diverging? Overbought?</td></tr>
+          <tr><td class="txt-grn" style="font-weight:700;white-space:nowrap">2 · Sector ETFs</td><td><span class="txt-tl" style="font-size:9px">$XLK $XLF $XLE $XLI $XLY $XLP $XLV $XLU $XLB</span></td><td style="font-size:9px">Defensives or aggressives leading?</td></tr>
+          <tr><td class="txt-grn" style="font-weight:700;white-space:nowrap">3 · Industry Groups</td><td style="font-size:9px">Top 2–3 in strongest sector</td><td style="font-size:9px">Leaders vs laggards in the group?</td></tr>
+          <tr><td class="txt-grn" style="font-weight:700;white-space:nowrap">4 · Stock Selection</td><td style="font-size:9px">Leaders within the winning group</td><td style="font-size:9px">Relative strength, at support, clean pattern?</td></tr>
         </tbody>
       </table>
-      <div style="background:var(--bg3);border-radius:var(--r);padding:10px 12px;margin-top:12px;font-family:var(--f1);font-size:9px;line-height:1.7;color:var(--c2);">
-        <span class="txt-ylo">⚡ HARD RULES:</span> Max 2 contracts on $12k. ATM or 1-strike ITM. Exit at 80–100% gain (take 50% off). Cut at 50% loss. Never hold through earnings unless that IS the trade.
-      </div>
-    </div>
-  </div>
-
-  <!-- Setup Playbooks -->
-  <div class="sec">
-    <div class="sec-hd">Setup Playbooks</div>
-    <div class="pb-tabs">
-      <button class="pb-tab on" onclick="showPB('A',this)">A · Momentum Breakout</button>
-      <button class="pb-tab" onclick="showPB('B',this)">B · EMA Pullback</button>
-      <button class="pb-tab" onclick="showPB('C',this)">C · VWAP Reclaim</button>
-      <button class="pb-tab" onclick="showPB('D',this)">D · ORB</button>
-      <button class="pb-tab" onclick="showPB('E',this)">E · Options Momentum</button>
-    </div>
-
-    <div class="pb-panel on" id="pb-A">
-      <div class="pb-layout">
-        <div class="pb-detail">
-          <div class="pb-title">Momentum Breakout</div><div class="pb-sub">SWING · 2–5 DAY HOLD</div>
-          <div class="pb-row"><span class="pb-k">Trigger</span><span class="pb-v txt-blu">Daily close above 20D high · vol ≥ 1.5×</span></div>
-          <div class="pb-row"><span class="pb-k">Entry</span><span class="pb-v">Breakout candle close or next open</span></div>
-          <div class="pb-row"><span class="pb-k">Stop</span><span class="pb-v txt-red">Below breakout candle low</span></div>
-          <div class="pb-row"><span class="pb-k">Target 1</span><span class="pb-v txt-grn">+1× ATR — take 50% off</span></div>
-          <div class="pb-row"><span class="pb-k">Target 2</span><span class="pb-v txt-grn">Next resistance / +2× ATR</span></div>
-          <div class="pb-row"><span class="pb-k">RSI</span><span class="pb-v txt-ylo">55–72 (strong but not extended)</span></div>
-          <div class="pb-row"><span class="pb-k">MACD</span><span class="pb-v txt-ylo">Bullish cross or rising histogram</span></div>
-          <div class="pb-row"><span class="pb-k">Avoid</span><span class="pb-v txt-red">Earnings within 5 days · thin volume</span></div>
+      <div class="risk-badges">
+        <div class="risk-badge on">
+          <div class="rb-lbl">✅ Risk-On</div>
+          <div class="rb-tickers">$XLK · $XLF · $IWM leading</div>
+          <div class="rb-action">→ Full size, aggressive setups</div>
         </div>
-        <div class="card" style="background:var(--bg2)">
-          <div style="font-family:var(--f1);font-size:8px;letter-spacing:3px;color:var(--c3);margin-bottom:10px;">PRE-ENTRY CHECKLIST</div>
-          <div id="ec-A"></div>
-          <hr class="div"><div style="display:flex;gap:8px;align-items:center;">
-            <button class="btn btn-s btn-sm" onclick="resetEC('A')">Reset</button>
-            <span style="font-family:var(--f1);font-size:9px;color:var(--c3);" id="ec-score-A"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="pb-panel" id="pb-B">
-      <div class="pb-layout">
-        <div class="pb-detail">
-          <div class="pb-title">EMA Pullback</div><div class="pb-sub">SWING · 2–4 DAY HOLD</div>
-          <div class="pb-row"><span class="pb-k">Trigger</span><span class="pb-v txt-blu">Uptrend retrace to rising 8 or 21 EMA</span></div>
-          <div class="pb-row"><span class="pb-k">Entry</span><span class="pb-v">Bounce candle with lower-wick rejection</span></div>
-          <div class="pb-row"><span class="pb-k">Stop</span><span class="pb-v txt-red">Daily close below 21 EMA</span></div>
-          <div class="pb-row"><span class="pb-k">Target</span><span class="pb-v txt-grn">Prior swing high · trail with 8 EMA</span></div>
-          <div class="pb-row"><span class="pb-k">RSI</span><span class="pb-v txt-ylo">40–55 on pullback (healthy retrace)</span></div>
-          <div class="pb-row"><span class="pb-k">Volume</span><span class="pb-v txt-ylo">Lower on pullback · surge on bounce</span></div>
-          <div class="pb-row"><span class="pb-k">VWAP</span><span class="pb-v">Price holding above VWAP on bounce</span></div>
-          <div class="pb-row"><span class="pb-k">Avoid</span><span class="pb-v txt-red">RSI &lt; 40 · price below 50D · downtrend</span></div>
-        </div>
-        <div class="card" style="background:var(--bg2)">
-          <div style="font-family:var(--f1);font-size:8px;letter-spacing:3px;color:var(--c3);margin-bottom:10px;">PRE-ENTRY CHECKLIST</div>
-          <div id="ec-B"></div>
-          <hr class="div"><div style="display:flex;gap:8px;align-items:center;">
-            <button class="btn btn-s btn-sm" onclick="resetEC('B')">Reset</button>
-            <span style="font-family:var(--f1);font-size:9px;color:var(--c3);" id="ec-score-B"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="pb-panel" id="pb-C">
-      <div class="pb-layout">
-        <div class="pb-detail">
-          <div class="pb-title">VWAP Reclaim / Reject</div><div class="pb-sub">DAY TRADE · INTRADAY ONLY</div>
-          <div class="pb-row"><span class="pb-k">Long trigger</span><span class="pb-v txt-grn">Price reclaims VWAP on volume surge</span></div>
-          <div class="pb-row"><span class="pb-k">Short trigger</span><span class="pb-v txt-red">Bounce fails and loses VWAP again</span></div>
-          <div class="pb-row"><span class="pb-k">Entry</span><span class="pb-v">5-min candle close confirming direction</span></div>
-          <div class="pb-row"><span class="pb-k">Stop</span><span class="pb-v txt-red">Other side of VWAP + 0.2% buffer</span></div>
-          <div class="pb-row"><span class="pb-k">Target</span><span class="pb-v txt-grn">Pre-mkt high/low · daily S/R</span></div>
-          <div class="pb-row"><span class="pb-k">Prime window</span><span class="pb-v txt-blu">9:30–10:30 ET or 2:00–3:30 ET</span></div>
-          <div class="pb-row"><span class="pb-k">Avoid</span><span class="pb-v txt-red">10:30–11:30 ET chop zone</span></div>
-          <div class="pb-row"><span class="pb-k">Volume</span><span class="pb-v txt-ylo">2× average on reclaim candle</span></div>
-        </div>
-        <div class="card" style="background:var(--bg2)">
-          <div style="font-family:var(--f1);font-size:8px;letter-spacing:3px;color:var(--c3);margin-bottom:10px;">PRE-ENTRY CHECKLIST</div>
-          <div id="ec-C"></div>
-          <hr class="div"><div style="display:flex;gap:8px;align-items:center;">
-            <button class="btn btn-s btn-sm" onclick="resetEC('C')">Reset</button>
-            <span style="font-family:var(--f1);font-size:9px;color:var(--c3);" id="ec-score-C"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="pb-panel" id="pb-D">
-      <div class="pb-layout">
-        <div class="pb-detail">
-          <div class="pb-title">Opening Range Breakout</div><div class="pb-sub">DAY TRADE · 9:30–10:00 WINDOW</div>
-          <div class="pb-row"><span class="pb-k">Define OR</span><span class="pb-v txt-blu">High/Low of first 15-min candle</span></div>
-          <div class="pb-row"><span class="pb-k">Entry</span><span class="pb-v">Clean break above/below on volume</span></div>
-          <div class="pb-row"><span class="pb-k">Stop</span><span class="pb-v txt-red">Midpoint of the opening range</span></div>
-          <div class="pb-row"><span class="pb-k">Target</span><span class="pb-v txt-grn">OR height projected from break level</span></div>
-          <div class="pb-row"><span class="pb-k">Trend filter</span><span class="pb-v txt-ylo">Must align with daily trend</span></div>
-          <div class="pb-row"><span class="pb-k">Gap rule</span><span class="pb-v txt-ylo">Ideal gap 0.5–1.5% · avoid &gt; 3%</span></div>
-          <div class="pb-row"><span class="pb-k">Avoid</span><span class="pb-v txt-red">News-driven gaps · earnings day</span></div>
-          <div class="pb-row"><span class="pb-k">Exit rule</span><span class="pb-v">All out by 3:45 ET — no overnight</span></div>
-        </div>
-        <div class="card" style="background:var(--bg2)">
-          <div style="font-family:var(--f1);font-size:8px;letter-spacing:3px;color:var(--c3);margin-bottom:10px;">PRE-ENTRY CHECKLIST</div>
-          <div id="ec-D"></div>
-          <hr class="div"><div style="display:flex;gap:8px;align-items:center;">
-            <button class="btn btn-s btn-sm" onclick="resetEC('D')">Reset</button>
-            <span style="font-family:var(--f1);font-size:9px;color:var(--c3);" id="ec-score-D"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="pb-panel" id="pb-E">
-      <div class="pb-layout">
-        <div class="pb-detail">
-          <div class="pb-title">Options Momentum</div><div class="pb-sub">OPTIONS · ATM / 1-STRIKE ITM</div>
-          <div class="pb-row"><span class="pb-k">Trigger</span><span class="pb-v txt-blu">Breakout or EMA bounce on high-price stock</span></div>
-          <div class="pb-row"><span class="pb-k">Strike</span><span class="pb-v">ATM or 1-strike ITM · delta 0.45–0.65</span></div>
-          <div class="pb-row"><span class="pb-k">Expiry</span><span class="pb-v txt-ylo">≥ 30 DTE swings · 7–14 DTE day plays</span></div>
-          <div class="pb-row"><span class="pb-k">IV Rule</span><span class="pb-v txt-ylo">IVR &lt; 30% — never buy expensive premium</span></div>
-          <div class="pb-row"><span class="pb-k">Stop</span><span class="pb-v txt-red">50% of premium paid — hard rule</span></div>
-          <div class="pb-row"><span class="pb-k">Target 1</span><span class="pb-v txt-grn">80–100% gain → take 50% off</span></div>
-          <div class="pb-row"><span class="pb-k">Target 2</span><span class="pb-v txt-grn">Trail remainder with 8 EMA on underlying</span></div>
-          <div class="pb-row"><span class="pb-k">Contracts</span><span class="pb-v txt-red">Max 2 contracts on $12k account</span></div>
-        </div>
-        <div class="card" style="background:var(--bg2)">
-          <div style="font-family:var(--f1);font-size:8px;letter-spacing:3px;color:var(--c3);margin-bottom:10px;">PRE-ENTRY CHECKLIST</div>
-          <div id="ec-E"></div>
-          <hr class="div"><div style="display:flex;gap:8px;align-items:center;">
-            <button class="btn btn-s btn-sm" onclick="resetEC('E')">Reset</button>
-            <span style="font-family:var(--f1);font-size:9px;color:var(--c3);" id="ec-score-E"></span>
-          </div>
+        <div class="risk-badge off">
+          <div class="rb-lbl">🛑 Risk-Off</div>
+          <div class="rb-tickers">$XLU · $XLV · $XLP leading</div>
+          <div class="rb-action">→ Shrink size, tighten stops, or sit flat</div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Row 2: Pattern Identification -->
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-top-line" style="background:linear-gradient(90deg,var(--tl),transparent)"></div>
+    <div class="card-title">Pattern Identification</div>
+
+    <div class="pb-section-hd" style="margin-top:4px">✅ Bullish Patterns We Trade</div>
+    <div class="patt-cards" style="grid-template-columns:repeat(auto-fill,minmax(190px,1fr));margin-bottom:20px">
+
+      <!-- 1. Volume Pocket / Ledge -->
+      <div class="patt-card-v2">
+        <svg class="patt-svg" viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg">
+          <rect x="28" y="50" width="78" height="11" fill="rgba(46,232,154,0.1)" rx="2"/>
+          <rect x="110" y="14" width="80" height="11" fill="rgba(62,184,240,0.1)" rx="2"/>
+          <polyline points="5,80 28,62 45,56 60,58 72,53 84,57 96,52 108,56 108,20 130,18 165,15" stroke="#9aa8b6" stroke-width="1.6" fill="none"/>
+          <line x1="28" y1="56" x2="108" y2="56" stroke="#2ee89a" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="110" y1="20" x2="185" y2="20" stroke="#3eb8f0" stroke-width="1" stroke-dasharray="3,3"/>
+          <circle cx="108" cy="56" r="4" fill="#2ee89a"/>
+          <polyline points="108,51 108,26" stroke="#2ee89a" stroke-width="1.2" fill="none" marker-end="url(#arr)"/>
+          <text x="36" y="47" font-size="7" fill="#2ee89a" font-family="Arial">LEDGE</text>
+          <text x="120" y="28" font-size="7" fill="#3eb8f0" font-family="Arial">POCKET ↑</text>
+        </svg>
+        <div class="patt-name">Volume Pocket / Ledge</div>
+        <div class="patt-type-tag">Continuation</div>
+        <div style="margin-top:8px;border-top:1px solid var(--ln);padding-top:8px;">
+          <div class="patt-trigger-lbl">Entry Trigger</div>
+          <div class="patt-trigger">Entry at the ledge; target = next pocket up</div>
+        </div>
+      </div>
+
+      <!-- 2. Bull Flag -->
+      <div class="patt-card-v2">
+        <svg class="patt-svg" viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="78" width="4" height="6" fill="rgba(46,232,154,0.5)"/>
+          <rect x="16" y="76" width="4" height="8" fill="rgba(46,232,154,0.6)"/>
+          <rect x="22" y="73" width="4" height="11" fill="rgba(46,232,154,0.7)"/>
+          <rect x="28" y="70" width="4" height="14" fill="rgba(46,232,154,0.8)"/>
+          <rect x="62" y="82" width="4" height="2" fill="rgba(62,184,240,0.35)"/>
+          <rect x="70" y="82" width="4" height="2" fill="rgba(62,184,240,0.35)"/>
+          <rect x="78" y="82" width="4" height="2" fill="rgba(62,184,240,0.35)"/>
+          <rect x="86" y="82" width="4" height="2" fill="rgba(62,184,240,0.35)"/>
+          <polyline points="10,80 52,22" stroke="#9aa8b6" stroke-width="1.8" fill="none"/>
+          <line x1="52" y1="22" x2="108" y2="30" stroke="#3eb8f0" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="52" y1="32" x2="108" y2="40" stroke="#3eb8f0" stroke-width="1" stroke-dasharray="3,3"/>
+          <polyline points="52,22 62,30 70,25 78,33 86,28 94,34 102,29 108,36" stroke="#9aa8b6" stroke-width="1.5" fill="none"/>
+          <polyline points="108,30 125,18 158,8" stroke="#2ee89a" stroke-width="1.8" fill="none"/>
+          <circle cx="108" cy="30" r="4" fill="#2ee89a"/>
+          <text x="130" y="8" font-size="7" fill="#2ee89a" font-family="Arial">BREAK ↑</text>
+          <text x="14" y="68" font-size="7" fill="#2ee89a" font-family="Arial">POLE</text>
+          <text x="65" y="50" font-size="7" fill="#3eb8f0" font-family="Arial">FLAG</text>
+        </svg>
+        <div class="patt-name">Bull Flag</div>
+        <div class="patt-type-tag">Continuation</div>
+        <div style="margin-top:8px;border-top:1px solid var(--ln);padding-top:8px;">
+          <div class="patt-trigger-lbl">Entry Trigger</div>
+          <div class="patt-trigger">Buy the breakout above the flag on volume</div>
+        </div>
+      </div>
+
+      <!-- 3. Ascending Triangle -->
+      <div class="patt-card-v2">
+        <svg class="patt-svg" viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg">
+          <line x1="10" y1="26" x2="178" y2="26" stroke="#f5c542" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <line x1="10" y1="76" x2="162" y2="28" stroke="#3eb8f0" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <polyline points="10,76 35,28 55,62 80,27 100,52 122,27 140,42 160,27" stroke="#9aa8b6" stroke-width="1.5" fill="none"/>
+          <polyline points="162,26 180,10" stroke="#2ee89a" stroke-width="1.8" fill="none"/>
+          <circle cx="162" cy="26" r="4" fill="#2ee89a"/>
+          <text x="162" y="8" font-size="7" fill="#2ee89a" font-family="Arial">BREAK ↑</text>
+          <text x="12" y="22" font-size="7" fill="#f5c542" font-family="Arial">FLAT RESISTANCE</text>
+          <text x="12" y="72" font-size="7" fill="#3eb8f0" font-family="Arial">RISING SUPPORT</text>
+        </svg>
+        <div class="patt-name">Ascending Triangle</div>
+        <div class="patt-type-tag">Continuation</div>
+        <div style="margin-top:8px;border-top:1px solid var(--ln);padding-top:8px;">
+          <div class="patt-trigger-lbl">Entry Trigger</div>
+          <div class="patt-trigger">Anticipatory buy at the higher low</div>
+        </div>
+      </div>
+
+      <!-- 4. Cup with Handle -->
+      <div class="patt-card-v2">
+        <svg class="patt-svg" viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg">
+          <line x1="5" y1="22" x2="192" y2="22" stroke="#f5c542" stroke-width="1" stroke-dasharray="3,3"/>
+          <path d="M12,22 Q95,84 168,22" stroke="#9aa8b6" stroke-width="1.8" fill="none"/>
+          <polyline points="168,22 172,29 176,24 180,29 183,23" stroke="#9aa8b6" stroke-width="1.5" fill="none"/>
+          <polyline points="183,22 190,13" stroke="#2ee89a" stroke-width="1.8" fill="none"/>
+          <circle cx="183" cy="22" r="4" fill="#2ee89a"/>
+          <circle cx="12" cy="22" r="3" fill="none" stroke="#f5c542" stroke-width="1.2"/>
+          <text x="72" y="18" font-size="7" fill="#f5c542" text-anchor="middle" font-family="Arial">RIM LEVEL</text>
+          <text x="160" y="52" font-size="7" fill="#9aa8b6" font-family="Arial">HANDLE</text>
+          <text x="140" y="12" font-size="7" fill="#2ee89a" font-family="Arial">BREAK ↑</text>
+        </svg>
+        <div class="patt-name">Cup with Handle</div>
+        <div class="patt-type-tag">Continuation</div>
+        <div style="margin-top:8px;border-top:1px solid var(--ln);padding-top:8px;">
+          <div class="patt-trigger-lbl">Entry Trigger</div>
+          <div class="patt-trigger">Buy the handle breakout above the cup rim</div>
+        </div>
+      </div>
+
+      <!-- 5. Rectangle Breakout -->
+      <div class="patt-card-v2">
+        <svg class="patt-svg" viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg">
+          <line x1="8" y1="24" x2="165" y2="24" stroke="#c95c72" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <line x1="8" y1="70" x2="165" y2="70" stroke="#3eb8f0" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <rect x="8" y="24" width="157" height="46" fill="rgba(62,184,240,0.05)" rx="2"/>
+          <polyline points="8,67 30,26 55,65 80,25 105,64 130,25 155,64 165,25" stroke="#9aa8b6" stroke-width="1.5" fill="none"/>
+          <polyline points="165,24 180,8" stroke="#2ee89a" stroke-width="1.8" fill="none"/>
+          <circle cx="165" cy="24" r="4" fill="#2ee89a"/>
+          <text x="148" y="6" font-size="7" fill="#2ee89a" font-family="Arial">BREAK ↑</text>
+          <text x="12" y="20" font-size="6.5" fill="#c95c72" font-family="Arial">RESISTANCE</text>
+          <text x="12" y="82" font-size="6.5" fill="#3eb8f0" font-family="Arial">SUPPORT</text>
+        </svg>
+        <div class="patt-name">Rectangle Breakout</div>
+        <div class="patt-type-tag">Continuation</div>
+        <div style="margin-top:8px;border-top:1px solid var(--ln);padding-top:8px;">
+          <div class="patt-trigger-lbl">Entry Trigger</div>
+          <div class="patt-trigger">Buy close above resistance on elevated volume</div>
+        </div>
+      </div>
+
+      <!-- 6. Double Bottom -->
+      <div class="patt-card-v2">
+        <svg class="patt-svg" viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg">
+          <line x1="5" y1="30" x2="190" y2="30" stroke="#f5c542" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="5" y1="76" x2="190" y2="76" stroke="rgba(62,184,240,0.3)" stroke-width="1" stroke-dasharray="3,2"/>
+          <polyline points="10,28 50,76 90,30 130,76 172,16" stroke="#9aa8b6" stroke-width="1.8" fill="none"/>
+          <circle cx="50" cy="76" r="3.5" fill="#3eb8f0"/>
+          <circle cx="130" cy="76" r="3.5" fill="#3eb8f0"/>
+          <circle cx="172" cy="16" r="4" fill="#2ee89a"/>
+          <text x="8" y="26" font-size="7" fill="#f5c542" font-family="Arial">NECKLINE</text>
+          <text x="158" y="12" font-size="7" fill="#2ee89a" font-family="Arial">BREAK ↑</text>
+        </svg>
+        <div class="patt-name">Double Bottom</div>
+        <div class="patt-type-tag">Reversal</div>
+        <div style="margin-top:8px;border-top:1px solid var(--ln);padding-top:8px;">
+          <div class="patt-trigger-lbl">Entry Trigger</div>
+          <div class="patt-trigger">Buy the neckline breakout</div>
+        </div>
+      </div>
+
+      <!-- 7. Falling Wedge -->
+      <div class="patt-card-v2">
+        <svg class="patt-svg" viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg">
+          <line x1="10" y1="16" x2="158" y2="52" stroke="#c95c72" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <line x1="10" y1="32" x2="154" y2="58" stroke="#3eb8f0" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <polyline points="10,18 30,34 52,22 72,38 92,30 112,42 132,36 150,50" stroke="#9aa8b6" stroke-width="1.5" fill="none"/>
+          <polyline points="152,48 160,42 178,22" stroke="#2ee89a" stroke-width="1.8" fill="none"/>
+          <circle cx="154" cy="47" r="4" fill="#2ee89a"/>
+          <text x="160" y="20" font-size="7" fill="#2ee89a" font-family="Arial">BREAK ↑</text>
+          <text x="12" y="12" font-size="7" fill="#c95c72" font-family="Arial">UPPER (STEEPER)</text>
+          <text x="12" y="70" font-size="7" fill="#3eb8f0" font-family="Arial">LOWER (SHALLOWER)</text>
+        </svg>
+        <div class="patt-name">Falling Wedge</div>
+        <div class="patt-type-tag">Reversal</div>
+        <div style="margin-top:8px;border-top:1px solid var(--ln);padding-top:8px;">
+          <div class="patt-trigger-lbl">Entry Trigger</div>
+          <div class="patt-trigger">Buy the breakout above upper trendline on volume</div>
+        </div>
+      </div>
+
+      <!-- 8. Broadening Formation -->
+      <div class="patt-card-v2">
+        <svg class="patt-svg" viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg">
+          <line x1="10" y1="36" x2="180" y2="14" stroke="#c95c72" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <line x1="10" y1="54" x2="180" y2="78" stroke="#3eb8f0" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <polyline points="10,37 35,52 65,22 95,66 125,16 155,74 168,78" stroke="#9aa8b6" stroke-width="1.5" fill="none"/>
+          <circle cx="155" cy="74" r="4" fill="#2ee89a"/>
+          <polyline points="155,70 155,56" stroke="#2ee89a" stroke-width="1.2" fill="none"/>
+          <text x="138" y="88" font-size="7" fill="#2ee89a" font-family="Arial">BUY HERE</text>
+          <text x="12" y="32" font-size="7" fill="#c95c72" font-family="Arial">HIGHER HIGHS</text>
+          <text x="12" y="68" font-size="7" fill="#3eb8f0" font-family="Arial">LOWER LOWS</text>
+        </svg>
+        <div class="patt-name">Broadening Formation</div>
+        <div class="patt-type-tag">Continuation or Reversal</div>
+        <div style="margin-top:8px;border-top:1px solid var(--ln);padding-top:8px;">
+          <div class="patt-trigger-lbl">Entry Trigger</div>
+          <div class="patt-trigger">Buy the higher low at the lower boundary</div>
+        </div>
+      </div>
+
+      <!-- 9. Rounding Bottom -->
+      <div class="patt-card-v2">
+        <svg class="patt-svg" viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg">
+          <line x1="5" y1="22" x2="192" y2="22" stroke="#f5c542" stroke-width="1" stroke-dasharray="3,3"/>
+          <path d="M12,22 Q18,45 35,60 Q70,82 98,82 Q130,82 160,58 Q175,44 178,22" stroke="#9aa8b6" stroke-width="1.8" fill="none"/>
+          <circle cx="12" cy="22" r="3" fill="none" stroke="#f5c542" stroke-width="1.2"/>
+          <circle cx="178" cy="22" r="4" fill="#2ee89a"/>
+          <text x="72" y="18" font-size="7" fill="#f5c542" text-anchor="middle" font-family="Arial">LIP LEVEL</text>
+          <text x="150" y="12" font-size="7" fill="#2ee89a" font-family="Arial">BREAK ↑</text>
+          <text x="70" y="88" font-size="7" fill="#9aa8b6" text-anchor="middle" font-family="Arial">SAUCER / GRADUAL CURVE</text>
+        </svg>
+        <div class="patt-name">Rounding Bottom</div>
+        <div class="patt-type-tag">Reversal</div>
+        <div style="margin-top:8px;border-top:1px solid var(--ln);padding-top:8px;">
+          <div class="patt-trigger-lbl">Entry Trigger</div>
+          <div class="patt-trigger">Buy the right-side breakout above the lip</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="pb-section-hd">⚠️ Neutral — Context Dependent</div>
+    <div class="patt-cards" style="grid-template-columns:repeat(auto-fill,minmax(190px,1fr));margin-bottom:20px">
+
+      <!-- 10. Symmetrical Triangle -->
+      <div class="patt-card-v2" style="border-color:rgba(245,197,66,.3)">
+        <svg class="patt-svg" viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg">
+          <line x1="10" y1="16" x2="168" y2="47" stroke="#c95c72" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <line x1="10" y1="74" x2="168" y2="47" stroke="#3eb8f0" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <polyline points="10,18 35,70 65,28 92,60 118,36 142,52 160,46" stroke="#9aa8b6" stroke-width="1.5" fill="none"/>
+          <circle cx="168" cy="47" r="3" fill="#f5c542"/>
+          <text x="172" y="36" font-size="12" fill="#f5c542" font-family="Arial">?</text>
+          <text x="170" y="58" font-size="7" fill="#9aa8b6" font-family="Arial">COIL</text>
+          <text x="10" y="12" font-size="7" fill="#c95c72" font-family="Arial">DESCENDING HH</text>
+          <text x="10" y="88" font-size="7" fill="#3eb8f0" font-family="Arial">ASCENDING LL</text>
+        </svg>
+        <div class="patt-name">Symmetrical Triangle / Coil</div>
+        <div class="patt-type-tag">Neutral</div>
+        <div style="margin-top:8px;border-top:1px solid var(--ln);padding-top:8px;">
+          <div class="patt-trigger-lbl">Rule</div>
+          <div class="patt-trigger" style="color:var(--ylo)">Follow the direction of the prior trend — don't force a direction</div>
+        </div>
+      </div>
+
+      <!-- 11. Price Channel -->
+      <div class="patt-card-v2" style="border-color:rgba(245,197,66,.3)">
+        <svg class="patt-svg" viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg">
+          <line x1="8" y1="24" x2="185" y2="14" stroke="#f5c542" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="8" y1="58" x2="185" y2="48" stroke="#3eb8f0" stroke-width="1.2"/>
+          <path d="M8,24 L185,14 L185,48 L8,58 Z" fill="rgba(62,184,240,0.05)"/>
+          <polyline points="8,54 35,25 65,50 95,22 125,48 155,20 178,46" stroke="#9aa8b6" stroke-width="1.5" fill="none"/>
+          <circle cx="65" cy="50" r="4" fill="#2ee89a"/>
+          <circle cx="125" cy="48" r="4" fill="#2ee89a"/>
+          <text x="12" y="20" font-size="7" fill="#f5c542" font-family="Arial">UPPER CHANNEL</text>
+          <text x="12" y="72" font-size="7" fill="#3eb8f0" font-family="Arial">LOWER — BUY NEAR HERE</text>
+        </svg>
+        <div class="patt-name">Price Channel</div>
+        <div class="patt-type-tag">Neutral</div>
+        <div style="margin-top:8px;border-top:1px solid var(--ln);padding-top:8px;">
+          <div class="patt-trigger-lbl">Rule</div>
+          <div class="patt-trigger" style="color:var(--ylo)">Trade with the trend; buy near channel support in uptrend</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="pb-section-hd">🔴 Watch But Don't Trade Short · ✕ Never Trade</div>
+    <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start">
+      <div>
+        <div style="font-family:var(--f1);font-size:8px;color:var(--c3);margin-bottom:6px;letter-spacing:1px;">USE AS WARNING FLAGS — AVOID LONGS, PROTECT POSITIONS</div>
+        <div class="patt-avoid-list">
+          <span class="patt-avoid-tag warn">Bear Flag</span>
+          <span class="patt-avoid-tag warn">Rising Wedge</span>
+          <span class="patt-avoid-tag warn">Descending Triangle</span>
+          <span class="patt-avoid-tag warn">Double Top</span>
+          <span class="patt-avoid-tag warn">H&amp;S Top</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:var(--f1);font-size:8px;color:var(--c3);margin-bottom:6px;letter-spacing:1px;">NEVER TRADE — LAGGING, WHIPSAW-PRONE</div>
+        <div class="patt-avoid-list">
+          <span class="patt-avoid-tag never">MA Crossovers (Golden / Death Cross)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 3: Entry Rules + Stop Loss -->
+  <div class="g2" style="margin-bottom:16px;">
+    <div class="card">
+      <div class="card-top-line" style="background:linear-gradient(90deg,var(--grn),transparent)"></div>
+      <div class="card-title">Entry Rules</div>
+      <table class="ta-table">
+        <thead><tr><th>Rule</th><th>Detail</th></tr></thead>
+        <tbody>
+          <tr><td class="txt-grn" style="font-weight:700;white-space:nowrap">Anticipatory</td><td>Position at support / higher low BEFORE the breakout — tightest risk</td></tr>
+          <tr><td class="txt-blu" style="font-weight:700;white-space:nowrap">Breakout</td><td>First close above resistance on elevated volume</td></tr>
+          <tr><td class="txt-ylo" style="font-weight:700;white-space:nowrap">Volume Confirm</td><td>Above-average volume on breakout candle = valid. Low volume = suspect</td></tr>
+          <tr><td class="txt-ylo" style="font-weight:700;white-space:nowrap">Overbought Filter</td><td>Check RSI / Stochastic — don't enter long when already overbought</td></tr>
+          <tr><td class="txt-red" style="font-weight:700;white-space:nowrap">Failed Moves</td><td>If a breakout fails and re-enters the range — exit fast. Reversals are sharp</td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:12px;">
+        <div style="font-family:var(--f1);font-size:8px;letter-spacing:2px;color:var(--c3);margin-bottom:8px;text-transform:uppercase">5-Step Trade Sheet</div>
+        <div class="ts-row"><div class="ts-num">1</div><div class="ts-field"><label>Pattern — chart pattern, trend direction, market + sector context</label><input type="text" id="ts-1" placeholder="e.g. Bull Flag on NVDA · QQQ in uptrend · XLK leading" oninput="tsSave()"></div></div>
+        <div class="ts-row"><div class="ts-num">2</div><div class="ts-field"><label>Analysis — best entry, target, risk level (invalidation point)</label><input type="text" id="ts-2" placeholder="e.g. Entry $125 · stop $121 · target $133 · 3-day swing" oninput="tsSave()"></div></div>
+        <div class="ts-row"><div class="ts-num">3</div><div class="ts-field"><label>Instrument — stock or option? Aggressive (OTM) vs Conservative (ITM/ATM)?</label><input type="text" id="ts-3" placeholder="e.g. ATM call, 45 DTE · 2% risk = 2 contracts" oninput="tsSave()"></div></div>
+        <div class="ts-row"><div class="ts-num">4</div><div class="ts-field"><label>Volume Pocket — ledge location, target pocket, expected duration</label><input type="text" id="ts-4" placeholder="e.g. Ledge at $123 · next pocket $131–$134 · 2–4 days" oninput="tsSave()"></div></div>
+        <div class="ts-row"><div class="ts-num">5</div><div class="ts-field"><label>Outcome — post-trade review</label><textarea id="ts-5" placeholder="Fill in after the trade closes..." oninput="tsSave()" style="height:50px"></textarea></div></div>
+        <div style="display:flex;gap:8px;margin-top:4px;align-items:center;">
+          <button class="btn btn-p btn-sm" onclick="tsCopyToJournal()">📋 Copy to Journal</button>
+          <button class="btn btn-s btn-sm" onclick="tsClear()">Clear</button>
+          <span id="ts-saved" style="font-family:var(--f1);font-size:9px;color:var(--grn);margin-left:auto;"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top-line" style="background:linear-gradient(90deg,var(--red),transparent)"></div>
+      <div class="card-title">Stop Loss Rules</div>
+      <table class="ta-table" style="margin-bottom:12px">
+        <thead><tr><th>Instrument</th><th>Stop Rule</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:700;white-space:nowrap">OTM Options</td><td>Risk the entire premium — size accordingly. No hard stop</td></tr>
+          <tr><td style="font-weight:700;white-space:nowrap">ATM Options</td><td>Stop at <span class="txt-red">50–75%</span> of premium paid</td></tr>
+          <tr><td style="font-weight:700;white-space:nowrap">ITM Options</td><td>Stop at <span class="txt-ylo">25–50%</span> of premium paid</td></tr>
+          <tr><td style="font-weight:700;white-space:nowrap">Stock</td><td>Entry minus 1× 14-day ATR, or 2% of account equity</td></tr>
+          <tr><td style="font-weight:700;white-space:nowrap">After Breakout</td><td>Old resistance = new support. Stop just below that level</td></tr>
+          <tr><td style="font-weight:700;white-space:nowrap">Time-Based</td><td>Move hasn't come in expected duration — exit. <span class="txt-red">Theta kills.</span></td></tr>
+        </tbody>
+      </table>
+      <div class="ta-warn">⛔ Never move a stop farther away. Trail it tighter as the trade works. Never widen it.</div>
+
+      <div style="margin-top:16px;">
+        <div style="font-family:var(--f1);font-size:8px;letter-spacing:2px;color:var(--c3);margin-bottom:8px;text-transform:uppercase">Exit Rules</div>
+        <table class="ta-table" style="margin-bottom:10px">
+          <thead><tr><th>Exit Type</th><th>When</th></tr></thead>
+          <tbody>
+            <tr><td class="txt-grn" style="font-weight:700;white-space:nowrap">First Scale-Out</td><td>At the volume pocket target — sell portion, let a runner work</td></tr>
+            <tr><td class="txt-grn" style="font-weight:700;white-space:nowrap">Let Runner Run</td><td>The methodology depends on big winners. Don't full-exit at first target</td></tr>
+            <tr><td class="txt-red" style="font-weight:700;white-space:nowrap">Stop / Breakdown</td><td>Risk level hit = thesis dead. Exit immediately</td></tr>
+            <tr><td class="txt-ylo" style="font-weight:700;white-space:nowrap">Pre-Expiry Exit</td><td>Close options <span class="txt-red">3–4 weeks before expiry</span>. Don't hold to expiration</td></tr>
+            <tr><td class="txt-blu" style="font-weight:700;white-space:nowrap">Profit Target</td><td>Pattern width = projected move. Use as limit order for partial or full exit</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:16px;">
+        <div style="font-family:var(--f1);font-size:8px;letter-spacing:2px;color:var(--c3);margin-bottom:8px;text-transform:uppercase">Position Sizing</div>
+        <table class="ta-table">
+          <thead><tr><th>Asset</th><th>Standard</th><th>Down</th><th>Up</th></tr></thead>
+          <tbody>
+            <tr><td style="font-weight:700;font-size:9px">Options (aggressive)</td><td class="txt-grn">2%</td><td class="txt-red" style="font-size:9px">0.5–1% losing streak</td><td class="txt-grn" style="font-size:9px">3–4% winning streak</td></tr>
+            <tr><td style="font-weight:700;font-size:9px">Options (low-vol)</td><td class="txt-grn">3–4%</td><td>—</td><td>—</td></tr>
+            <tr><td style="font-weight:700;font-size:9px">Options (high-vol)</td><td class="txt-ylo">1–2%</td><td>—</td><td>—</td></tr>
+            <tr><td style="font-weight:700;font-size:9px">Stocks</td><td class="txt-grn">5–10%</td><td>—</td><td>—</td></tr>
+            <tr><td style="font-weight:700;font-size:9px">Cash buffer</td><td class="txt-tl">10% min</td><td class="txt-red" style="font-size:9px">50%+ volatile</td><td>—</td></tr>
+            <tr><td style="font-weight:700;font-size:9px">Total options</td><td class="txt-tl">20–30%</td><td class="txt-red" style="font-size:9px">10% high-vol</td><td class="txt-grn" style="font-size:9px">50% low-vol</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 4: Options — Combined Greeks + Selection Guide -->
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-top-line" style="background:linear-gradient(90deg,var(--prp),transparent)"></div>
+    <div class="card-title">Options — Greeks &amp; Selection Guide</div>
+    <div class="g2" style="gap:16px;margin-bottom:0">
+      <div>
+        <div class="pb-section-hd">Greeks — Rob's Rules</div>
+        <table class="gk-table" style="margin-bottom:12px">
+          <thead><tr><th>Greek</th><th>Meaning</th><th>Your Rule</th></tr></thead>
+          <tbody>
+            <tr><td class="txt-grn">Delta</td><td class="txt-c2">$ move per $1 underlying</td><td class="txt-c1">0.40–0.60 swing · 0.65+ ITM high-prob</td></tr>
+            <tr><td class="txt-red">Gamma</td><td class="txt-c2">Delta acceleration</td><td class="txt-c1">Spikes near expiry — avoid &lt; 7 DTE buys</td></tr>
+            <tr><td class="txt-prp">Theta</td><td class="txt-c2">Daily time decay cost</td><td class="txt-c1">Never buy &lt; 21 DTE for swings. Prefer ≥ 30.</td></tr>
+            <tr><td class="txt-tl">Vega</td><td class="txt-c2">IV sensitivity per 1%</td><td class="txt-c1">Buy when IVR &lt; 30%. Avoid post-event crush.</td></tr>
+            <tr><td class="txt-ylo">IV Rank</td><td class="txt-c2">Current IV percentile</td><td class="txt-c1">Buy &lt; 30 IVR · Sell premium &gt; 60 IVR</td></tr>
+          </tbody>
+        </table>
+        <div style="background:var(--bg3);border-radius:var(--r);padding:10px 12px;font-family:var(--f1);font-size:9px;line-height:1.7;color:var(--c2);">
+          <span class="txt-ylo">⚡ HARD RULES:</span> Max 2 contracts on $12k. ATM or 1-strike ITM. Exit at 80–100% gain (take 50% off). Cut at 50% loss. Never hold through earnings unless that IS the trade.
+        </div>
+      </div>
+      <div>
+        <div class="pb-section-hd">Selection by Conviction</div>
+        <table class="ta-table" style="margin-bottom:12px">
+          <thead><tr><th>Conviction</th><th>Strike</th><th>Expiry</th><th>Size</th><th>Stop</th></tr></thead>
+          <tbody>
+            <tr><td class="txt-red" style="font-weight:700">Aggressive</td><td style="font-size:9px">OTM 1–2 out</td><td style="font-size:9px">Front month</td><td class="txt-ylo">2%</td><td style="font-size:9px">None</td></tr>
+            <tr><td class="txt-ylo" style="font-weight:700">Moderate</td><td style="font-size:9px">ATM</td><td style="font-size:9px">45 days out</td><td class="txt-ylo">2%</td><td style="font-size:9px">50–75% prem</td></tr>
+            <tr><td class="txt-grn" style="font-weight:700">Conservative</td><td style="font-size:9px">ITM 1–2 in</td><td style="font-size:9px">60–90 days</td><td class="txt-grn">3%</td><td style="font-size:9px">25–50% prem</td></tr>
+            <tr><td class="txt-tl" style="font-weight:700">LEAPS</td><td style="font-size:9px">ATM or ITM</td><td style="font-size:9px">6–12 months</td><td class="txt-tl">2–3%</td><td style="font-size:9px">25–50% prem</td></tr>
+          </tbody>
+        </table>
+        <div style="font-family:var(--f1);font-size:8px;letter-spacing:1.5px;color:var(--c3);margin-bottom:8px;text-transform:uppercase">Pre-Order Checklist</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          <div style="background:var(--bg3);border:1px solid var(--ln);border-radius:var(--r);padding:8px 10px;font-family:var(--f1);font-size:9px;color:var(--c2)">📊 Your contracts ≤ <span class="txt-grn">5% of total OI</span></div>
+          <div style="background:var(--bg3);border:1px solid var(--ln);border-radius:var(--r);padding:8px 10px;font-family:var(--f1);font-size:9px;color:var(--c2)">💰 Bid/ask spread ≤ <span class="txt-grn">$0.20</span> under $5</div>
+          <div style="background:var(--bg3);border:1px solid var(--ln);border-radius:var(--r);padding:8px 10px;font-family:var(--f1);font-size:9px;color:var(--c2)">📅 Buy <span class="txt-grn">1 month more</span> than trade duration</div>
+          <div style="background:var(--bg3);border:1px solid var(--ln);border-radius:var(--r);padding:8px 10px;font-family:var(--f1);font-size:9px;color:var(--c2)">🌡 High IV → <span class="txt-ylo">size smaller or go further out</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 5: Pre-Trade Mental Checklist + Philosophy -->
+  <div class="g2" style="margin-bottom:0">
+    <div class="card">
+      <div class="card-top-line" style="background:linear-gradient(90deg,var(--ylo),transparent)"></div>
+      <div class="card-title">Pre-Trade Mental Checklist</div>
+      <div style="font-family:var(--f1);font-size:9px;color:var(--c3);margin-bottom:12px;">Answer all 5 before you trade. If you can't — don't trade it.</div>
+      <div id="mc-items">
+        <div class="mc-item" onclick="mcCheck(this)">
+          <div class="mc-num">1</div>
+          <div><div class="mc-q">What am I buying?</div><div class="mc-hint">Ticker + instrument type</div></div>
+        </div>
+        <div class="mc-item" onclick="mcCheck(this)">
+          <div class="mc-num">2</div>
+          <div><div class="mc-q">When am I getting in?</div><div class="mc-hint">Entry trigger + price</div></div>
+        </div>
+        <div class="mc-item" onclick="mcCheck(this)">
+          <div class="mc-num">3</div>
+          <div><div class="mc-q">How much am I buying?</div><div class="mc-hint">Position size in dollars / contracts</div></div>
+        </div>
+        <div class="mc-item" onclick="mcCheck(this)">
+          <div class="mc-num">4</div>
+          <div><div class="mc-q">When am I taking profits?</div><div class="mc-hint">Target price + scale-out plan</div></div>
+        </div>
+        <div class="mc-item" onclick="mcCheck(this)">
+          <div class="mc-num">5</div>
+          <div><div class="mc-q">Where is my stop?</div><div class="mc-hint">The exact price that says the trade is wrong</div></div>
+        </div>
+      </div>
+      <div class="mc-status nogo" id="mc-status">⛔ Answer all 5 questions before trading</div>
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <button class="btn btn-s btn-sm" onclick="mcReset()">Reset</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top-line" style="background:linear-gradient(90deg,var(--grn),transparent)"></div>
+      <div class="card-title">Core Philosophy</div>
+      <div class="ta-quote">"A key to my success is position sizing and letting winners run."</div>
+      <div class="ta-quote">"I'd rather plan on how to manage a loss, rather than only focusing on how much I could potentially gain."</div>
+      <div class="ta-math">
+        <div class="ta-math-stat">
+          <div class="ta-math-val txt-red">&lt;40%</div>
+          <div class="ta-math-lbl">WIN RATE BY DESIGN</div>
+        </div>
+        <div class="ta-math-stat">
+          <div class="ta-math-val txt-grn">~+247%</div>
+          <div class="ta-math-lbl">AVG WINNER</div>
+        </div>
+        <div class="ta-math-stat">
+          <div class="ta-math-val txt-red">~-84%</div>
+          <div class="ta-math-lbl">AVG LOSER</div>
+        </div>
+      </div>
+      <div style="margin-top:16px;background:var(--bg3);border:1px solid var(--ln);border-radius:var(--r);padding:14px;font-family:var(--f1);font-size:10px;line-height:1.8;color:var(--c1);">
+        The math only works if you:<br>
+        <span class="txt-red">Lose small often</span> → <span class="txt-grn">Win big occasionally</span> → <span class="txt-tl">Stay in the game.</span>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <!-- ══ PAGE: JOURNAL ════════════════════════ -->
@@ -1795,7 +2205,7 @@ Stock Screener - Charts TSLA,BILI,VNET,PONY,XPEV</pre>
 /* ═══════════════════════════════════════════
    STORAGE
 ═══════════════════════════════════════════ */
-const KT='apexx_t4',KJ='apexx_j4',KW='apexx_w4',KC='apexx_c4',KCAP='apexx_cap4',KSEED='apexx_seed_webull_v1',KDEP='apexx_dep_v1',KDEPSEED='apexx_depseed_v1',KEXPSEED='apexx_expireseed_v1',KCONSOL='apexx_consolseed_v1',KPNLOV='apexx_pnlov_v1',KEOD='apexx_eod_history_v1',KFX='apexx_fx_v1',KCAPCUR='apexx_cap_cur_v1',KFXMIG='apexx_fx_migration_v2',KWN='apexx_weekly_notes_v1',KTGT='apexx_targets_v1';
+const KT='apexx_t4',KJ='apexx_j4',KW='apexx_w4',KC='apexx_c4',KCAP='apexx_cap4',KSEED='apexx_seed_webull_v1',KDEP='apexx_dep_v1',KDEPSEED='apexx_depseed_v1',KEXPSEED='apexx_expireseed_v1',KCONSOL='apexx_consolseed_v1',KPNLOV='apexx_pnlov_v1',KEOD='apexx_eod_history_v1',KFX='apexx_fx_v1',KCAPCUR='apexx_cap_cur_v1',KFXMIG='apexx_fx_migration_v2',KWN='apexx_weekly_notes_v1',KTGT='apexx_targets_v1',KBALSEED='apexx_balseed_v1',KBALSEED2='apexx_balseed_v2';
 
 /* ── SECTOR (SPDR ETF) + THEME tagging ────────────────────────
    SECTOR_OPTS use SPDR sector ETFs as canonical sector buckets so they line up with the
@@ -2222,6 +2632,7 @@ function rerenderAll(){
   try{typeof renderCal==='function'&&renderCal();}catch(e){}
   try{if(document.getElementById('page-analytics')&&document.getElementById('page-analytics').classList.contains('on')&&typeof renderAnalytics==='function')renderAnalytics();}catch(e){}
   try{typeof calcSize==='function'&&calcSize();}catch(e){}
+  try{typeof tsLoad==='function'&&tsLoad();}catch(e){}
 }
 let trades=JSON.parse(localStorage.getItem(KT)||'[]');
 let journal=JSON.parse(localStorage.getItem(KJ)||'[]');
@@ -2250,6 +2661,55 @@ if(!localStorage.getItem(KSEED)){
   trades=WEBULL_SEED.filter(t=>!existingIds.has(t.id)).concat(trades);
   sv(KT,trades);
   localStorage.setItem(KSEED,'1');
+}
+
+/* Seed actual Webull balance history (Oct 2025 – Feb 2026) into EOD store. One-shot per browser. */
+if(!localStorage.getItem(KBALSEED)){
+  const _bk=JSON.parse(localStorage.getItem(KEOD)||'{}');
+  [['2025-10-03',68000],['2025-10-06',99000],['2025-10-07',98500],['2025-10-08',112000],
+   ['2025-10-10',98800],['2025-10-13',105000],['2025-10-14',116572],['2025-10-15',117000],
+   ['2025-10-16',100000],['2025-10-17',87000],['2025-10-20',95300],['2025-10-21',90600],
+   ['2025-10-22',78900],['2025-10-23',84000],['2025-10-24',91000],['2025-10-27',104400],
+   ['2025-10-28',100000],['2025-10-29',97000],['2025-10-30',89070],['2025-11-03',77000],
+   ['2025-11-04',63200],['2025-11-05',66300],['2025-11-06',58300],['2025-11-07',62600],
+   ['2025-11-10',59500],['2025-11-11',53000],['2025-11-12',50600],['2025-11-13',43600],
+   ['2025-11-14',40600],['2025-11-17',35000],['2025-11-18',39700],['2025-11-19',38200],
+   ['2025-11-20',34000],['2025-11-21',33600],['2025-11-24',34500],['2025-11-25',35700],
+   ['2025-11-26',38200],['2025-11-27',39800],['2025-12-01',35400],['2025-12-02',33700],
+   ['2025-12-03',37800],['2025-12-04',43400],['2025-12-05',39600],['2025-12-08',38600],
+   ['2025-12-09',40800],['2025-12-10',38500],['2025-12-11',39300],['2025-12-12',31500],
+   ['2025-12-15',23800],['2025-12-16',23500],['2025-12-17',20800],['2025-12-18',20300],
+   ['2025-12-19',22000],['2025-12-22',21900],['2025-12-23',20200],['2025-12-24',19500],
+   ['2025-12-26',17900],['2025-12-29',17000],['2025-12-30',16400],['2025-12-31',16000],
+   ['2026-01-02',18400],['2026-01-05',19400],['2026-01-06',20400],['2026-01-07',19300],
+   ['2026-01-08',19600],['2026-01-09',19150],['2026-01-12',20000],['2026-01-13',19500],
+   ['2026-01-14',20500],['2026-01-15',19500],['2026-01-16',23000],['2026-01-20',20300],
+   ['2026-01-21',19100],['2026-01-22',21300],['2026-01-23',20100],['2026-01-26',18000],
+   ['2026-01-27',20300],['2026-01-28',20300],['2026-01-29',16900],['2026-01-30',15100],
+   ['2026-02-02',14500],['2026-02-03',15800],['2026-02-04',15800],['2026-02-05',11300],
+   ['2026-02-06',13200],['2026-02-09',13350]
+  ].forEach(([d,b])=>{if(!_bk[d])_bk[d]={};_bk[d].actualBalance=b;_bk[d].actualBalanceCur='CAD';});
+  localStorage.setItem(KEOD,JSON.stringify(_bk));
+  localStorage.setItem(KBALSEED,'1');
+}
+
+/* One-time cleanup (KBALSEED2): the original KBALSEED migration incorrectly set totalPnl=0
+   on balance-seed-only dates (entries with actualBalance but no count/ts from a real EOD paste).
+   Those zeros poisoned the snapDates carry-forward and broke anchorUnreal. Remove them. */
+if(!localStorage.getItem(KBALSEED2)){
+  try{
+    const _ck=JSON.parse(localStorage.getItem(KEOD)||'{}');
+    let _cleaned=false;
+    Object.keys(_ck).forEach(d=>{
+      // Balance-seed-only entry: has actualBalance, no user EOD paste (count would be set by paste).
+      if(_ck[d]!=null&&_ck[d].actualBalance!=null&&_ck[d].count==null&&_ck[d].totalPnl===0){
+        delete _ck[d].totalPnl;
+        _cleaned=true;
+      }
+    });
+    if(_cleaned)localStorage.setItem(KEOD,JSON.stringify(_ck));
+  }catch(e){}
+  localStorage.setItem(KBALSEED2,'1');
 }
 
 /* Expire any open options whose expiry date has already passed → close at $0. */
@@ -3284,7 +3744,62 @@ function resetEC(k){EC[k].forEach((_,i)=>ecState[k][i]=false);renderEC(k);}
 function showPB(id,el){
   document.querySelectorAll('.pb-panel').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.pb-tab').forEach(t=>t.classList.remove('on'));
-  document.getElementById('pb-'+id).classList.add('on');el.classList.add('on');
+  const el2=document.getElementById('pb-'+id);if(el2)el2.classList.add('on');el.classList.add('on');
+}
+
+/* ── TRADING ADDICTS PLAYBOOK ── */
+function showTA(id,el){
+  document.querySelectorAll('.ta-panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.ta-step').forEach(t=>t.classList.remove('on'));
+  const panel=document.getElementById('ta-'+id);if(panel)panel.classList.add('on');
+  el.classList.add('on');
+}
+function togglePatt(el){
+  const wasOpen=el.classList.contains('open');
+  // Close all in same group
+  el.closest('.patt-cards').querySelectorAll('.patt-card').forEach(c=>c.classList.remove('open'));
+  if(!wasOpen)el.classList.add('open');
+}
+function mcCheck(el){
+  el.classList.toggle('done');
+  const items=document.querySelectorAll('#mc-items .mc-item');
+  const done=[...items].filter(i=>i.classList.contains('done')).length;
+  const statusEl=document.getElementById('mc-status');
+  if(done===items.length){
+    statusEl.className='mc-status go';statusEl.textContent='✅ All 5 answered — you\'re cleared to trade';
+  } else {
+    statusEl.className='mc-status nogo';statusEl.textContent='⛔ '+done+'/5 answered — '+(items.length-done)+' remaining';
+  }
+}
+function mcReset(){
+  document.querySelectorAll('#mc-items .mc-item').forEach(i=>i.classList.remove('done'));
+  const s=document.getElementById('mc-status');
+  s.className='mc-status nogo';s.textContent='⛔ Answer all 5 questions before trading';
+}
+function tsSave(){
+  const d={};
+  ['1','2','3','4','5'].forEach(n=>{const el=document.getElementById('ts-'+n);if(el)d[n]=el.value;});
+  try{localStorage.setItem('apexx_ts',JSON.stringify(d));}catch(e){}
+  const s=document.getElementById('ts-saved');if(s){s.textContent='Saved';setTimeout(()=>s.textContent='',1200);}
+}
+function tsLoad(){
+  try{const d=JSON.parse(localStorage.getItem('apexx_ts')||'{}');
+    ['1','2','3','4','5'].forEach(n=>{const el=document.getElementById('ts-'+n);if(el&&d[n])el.value=d[n];});}catch(e){}
+}
+function tsClear(){
+  ['1','2','3','4','5'].forEach(n=>{const el=document.getElementById('ts-'+n);if(el)el.value='';});
+  try{localStorage.removeItem('apexx_ts');}catch(e){}
+}
+function tsCopyToJournal(){
+  const get=n=>{const el=document.getElementById('ts-'+n);return el?el.value.trim():''};
+  const lines=['📋 Trade Sheet — '+new Date().toLocaleDateString(),
+    '1. Pattern: '+get('1'),'2. Analysis: '+get('2'),'3. Instrument: '+get('3'),
+    '4. Vol Pocket: '+get('4'),'5. Outcome: '+get('5')].filter(l=>l&&!l.endsWith(': ')).join('\n');
+  // Paste into journal ideas field
+  const jf=document.getElementById('jf-worked');
+  if(jf){jf.value=lines;showPage('journal');const tab=document.querySelector('[data-page="journal"]');if(tab){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));tab.classList.add('on');}}
+  else{navigator.clipboard&&navigator.clipboard.writeText(lines);}
+  const s=document.getElementById('ts-saved');if(s){s.textContent='Copied to Journal ✓';setTimeout(()=>s.textContent='',2000);}
 }
 
 /* ═══════════════════════════════════════════
@@ -4026,9 +4541,25 @@ function _pnlScopeBounds(){
   const D=tgt.daily/fxMode.rate;
   const to=todayLocalISO();
   const today=new Date();today.setHours(0,0,0,0);
+  const dow=today.getDay(); // 0=Sun,1=Mon,2=Tue,3=Wed,4=Thu,5=Fri,6=Sat
   const isoLocal=d=>{const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),dd=String(d.getDate()).padStart(2,'0');return `${y}-${m}-${dd}`;};
-  if(pnlScope==='today')return {from:to,to,label:"TODAY'S P&L",target:D};
-  if(pnlScope==='week'){const s=new Date(today);s.setDate(today.getDate()-6);return {from:isoLocal(s),to,label:'7-DAY P&L',target:D*5};}
+  if(pnlScope==='today'){
+    // On weekends show last Friday's P&L so EOD marks stay visible; resets Monday morning
+    if(dow===6||dow===0){
+      const fri=new Date(today);fri.setDate(today.getDate()-(dow===6?1:2));
+      const friStr=isoLocal(fri);
+      return {from:friStr,to:friStr,label:'FRI P&L',target:D};
+    }
+    return {from:to,to,label:"TODAY'S P&L",target:D};
+  }
+  if(pnlScope==='week'){
+    // Current week Mon→today. On weekends show last week Mon→Fri; resets Monday.
+    let wMon,wTo;
+    if(dow===0){wTo=new Date(today);wTo.setDate(today.getDate()-2);wMon=new Date(today);wMon.setDate(today.getDate()-6);}      // Sun→last Mon→Fri
+    else if(dow===6){wTo=new Date(today);wTo.setDate(today.getDate()-1);wMon=new Date(today);wMon.setDate(today.getDate()-5);}  // Sat→last Mon→Fri
+    else{wMon=new Date(today);wMon.setDate(today.getDate()-(dow-1));wTo=today;}                                                  // Weekday→this Mon→today
+    return {from:isoLocal(wMon),to:isoLocal(wTo),label:'WEEK P&L',target:D*5};
+  }
   if(pnlScope==='month'){const s=new Date(today.getFullYear(),today.getMonth(),1);return {from:isoLocal(s),to,label:'MONTH P&L',target:D*21};}
   if(pnlScope==='ytd'){const s=new Date(today.getFullYear(),0,1);return {from:isoLocal(s),to,label:'YTD P&L',target:D*252};}
   if(pnlScope==='year'){const s=new Date(today);s.setDate(today.getDate()-364);return {from:isoLocal(s),to,label:'1-YEAR P&L',target:D*252};}
@@ -6225,6 +6756,28 @@ function clearAcctRange(){
   document.querySelectorAll('.acct-tf').forEach(b=>b.classList.toggle('on',b.dataset.tf==='all'));
   renderAccountChart();
 }
+/* ─── Log Balance: quick-anchor the balance chart to today's Webull balance ─── */
+function openLogBalance(){
+  const todayIso=todayLocalISO();
+  const balStr=prompt(
+    '📌 Log Today\'s Account Balance\n\n'+
+    'Enter your current Webull account total (this anchors the red Balance line).\n'+
+    'Currency: CAD (Webull Canada shows CAD balances)\n\n'+
+    'Example: 28500',
+    ''
+  );
+  if(!balStr)return;
+  const balVal=parseFloat(balStr.replace(/[,$\s]/g,''));
+  if(!isFinite(balVal)||balVal<=0){alert('Invalid amount — enter a number like 28500');return;}
+  const hist=JSON.parse(localStorage.getItem(KEOD)||'{}');
+  hist[todayIso]=hist[todayIso]||{};
+  hist[todayIso].actualBalance=balVal;
+  hist[todayIso].actualBalanceCur='CAD';
+  // Preserve any existing totalPnl/count so EOD marks on the same date aren't lost
+  localStorage.setItem(KEOD,JSON.stringify(hist));
+  renderAccountChart();
+  toast('✓ Balance anchored at '+(fxMode.currency==='CAD'?'C$':'$')+balVal.toLocaleString()+' for '+todayIso+'. Chart updated.');
+}
 function _acctWindow(firstDate){
   const today=new Date();today.setHours(0,0,0,0);
   const from=new Date(firstDate);from.setHours(0,0,0,0);
@@ -6277,7 +6830,10 @@ function renderAccountChart(){
     .filter(t=>t.marks.length);
   let migrated=false;
   Object.keys(keodRaw).forEach(d=>{
-    if(keodRaw[d].totalPnl==null){
+    // Only migrate dates where the user actually pasted EOD marks (count is set by pasteEOD).
+    // Balance-seed-only entries (actualBalance but no count) have no trade marks to sum — skip them
+    // to avoid poisoning the snapDates carry-forward with spurious zeros.
+    if(keodRaw[d].totalPnl==null && keodRaw[d].count!=null){
       let u=0;
       openWithMarks.forEach(t=>{const mk=t.marks.find(m=>m.date===d);if(mk)u+=+mk.pnl;});
       keodRaw[d].totalPnl=u;
@@ -6302,26 +6858,49 @@ function renderAccountChart(){
     }
   });
   const actualDates=Object.keys(actualBalUSD).sort();
-  // For a given day, return the pinned USD balance (actual) if available, else null
-  function pinnedBal(dIso){
-    if(actualBalUSD[dIso]!=null)return actualBalUSD[dIso];
-    if(!actualDates.length)return null;
-    // After last known actual: carry forward the last value
-    if(dIso>actualDates[actualDates.length-1])return actualBalUSD[actualDates[actualDates.length-1]];
-    return null;
-  }
+  const hasActual=actualDates.length>0;
+  const firstActual=hasActual?actualDates[0]:null;
+  const lastActual=hasActual?actualDates[actualDates.length-1]:null;
 
   const daily={dep:[],pnl:[],bal:[],unreal:[]};
   let cDep=0,cPnl=0;
   const lastIdx=days.length-1;
+  // Anchor: most recent actual Webull balance + the APEXX cDep/pnl/unreal at that moment.
+  // Post-anchor balance = anchorBal + Δdeposits + ΔrealizedP&L + Δunrealized(EOD marks).
+  let anchorBal=null,anchorCDep=0,anchorPnl=0,anchorUnreal=0;
+
   days.forEach((d,i)=>{
     (byDate[d]||[]).forEach(e=>{if(e.type==='dep')cDep+=e.v;else cPnl+=e.v;});
     const unreal=unrealOnDay(d);
     const realShown=cPnl+(i===lastIdx?pnlDelta:0);
-    const pinned=pinnedBal(d);
-    // Use actual Webull balance when available; fall back to calculated
+    let balUSD=null;
+
+    if(hasActual){
+      if(actualBalUSD[d]!=null){
+        // Exact Webull balance entry — use it and refresh anchor
+        balUSD=actualBalUSD[d];
+        anchorBal=balUSD;anchorCDep=cDep;anchorPnl=realShown;anchorUnreal=unreal;
+      } else if(d<firstActual){
+        // Before any actual data: fall back to calculated formula
+        balUSD=null;
+      } else if(d>lastActual){
+        // After last actual entry: anchor + Δdeposits + ΔrealizedP&L + ΔunrealizedP&L
+        // Δunrealized comes from EOD mark snapshots — this is what was driving the
+        // balance movement after April 22 before this change.
+        if(anchorBal!=null) balUSD=anchorBal+(cDep-anchorCDep)+(realShown-anchorPnl)+(unreal-anchorUnreal);
+      } else {
+        // Between two actual entries: linear interpolation (accurate with daily data)
+        let lo=null,hi=null;
+        for(const dt of actualDates){if(dt<d)lo=dt;else if(dt>d&&hi===null)hi=dt;}
+        if(lo&&hi){
+          const t0=+new Date(lo),t1=+new Date(hi),tQ=+new Date(d);
+          balUSD=actualBalUSD[lo]+(actualBalUSD[hi]-actualBalUSD[lo])*(tQ-t0)/(t1-t0);
+        }
+      }
+    }
+
     daily.dep.push(cDep);daily.pnl.push(realShown);
-    daily.bal.push(pinned!=null?pinned:(scUSD+cDep+realShown+unreal));
+    daily.bal.push(balUSD!=null?balUSD:(scUSD+cDep+realShown+unreal));
     daily.unreal.push(unreal);
   });
 
@@ -6766,13 +7345,7 @@ function renderDash(){
     if(!t.marks||!t.marks.length)return;
     // Marks are stored sorted by date ascending.
     const marksInScope=t.marks.filter(m=>m.date>=bounds.from&&m.date<=bounds.to&&m.pnl!=null);
-    if(!marksInScope.length){
-      // Fallback: no marks exist for this scope window (e.g. "Today" selected but latest
-      // marks are yesterday's EOD). Use the delta between the two most recent marks so the
-      // P&L bar always reflects the most recent available movement rather than showing $0.
-      if(pnlScope==='today'){const mk=latestMark(t),pk=prevMark(t);if(mk&&pk&&mk.pnl!=null&&pk.pnl!=null)todayUnrealDelta+=(mk.pnl-pk.pnl);}
-      return;
-    }
+    if(!marksInScope.length)return;
     const last=marksInScope[marksInScope.length-1];
     // Baseline = latest mark strictly before scope.from (preferred), else first mark in scope itself
     const priorOutside=t.marks.filter(m=>m.date<bounds.from&&m.pnl!=null);
@@ -6809,7 +7382,7 @@ function renderDash(){
   let ctTxt=todayT.length+' closed · '+openedInScope+' opened · '+markedInScope+' marked '+scopeWord;
   // If scope==today and NO marks exist for today, surface a helpful hint instead of silent $0
   if(pnlScope==='today' && markedInScope===0 && todayT.length===0){
-    ctTxt+=' — <span style="color:var(--ylo)">no marks for today yet · showing latest EOD Δ</span>';
+    ctTxt+=' — <span style="color:var(--ylo)">no marks for '+bounds.to+' yet</span>';
   }
   const ctEl=document.getElementById('dash-trade-ct');
   if(ctEl)ctEl.innerHTML=ctTxt; else set('dash-trade-ct',ctTxt);
