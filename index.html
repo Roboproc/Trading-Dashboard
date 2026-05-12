@@ -12,8 +12,10 @@
 <meta name="theme-color" content="#070b0f">
 <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'&gt;&lt;rect width='180' height='180' rx='36' fill='%23070b0f'/&gt;&lt;text x='50%25' y='58%25' text-anchor='middle' font-family='Georgia,serif' font-size='92' font-weight='700' fill='%232ee89a'&gt;A&lt;/text&gt;&lt;/svg&gt;">
 <style>
-/* Respect iOS safe-area insets so the topbar doesn't get eaten by the notch */
+/* Respect iOS safe-area insets so the topbar doesn't get eaten by the notch/Dynamic Island */
 body{padding-bottom:env(safe-area-inset-bottom);overflow-x:clip;}
+/* Push topbar content below the iOS status bar (notch / Dynamic Island) */
+#topbar{padding-top:env(safe-area-inset-top);}
 /* ── TOKENS ─────────────────────────────── */
 :root {
   --bg0:#070b0f;--bg1:#0b1017;--bg2:#0f1620;--bg3:#131d28;--bg4:#18242f;
@@ -45,7 +47,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 /* ── TOPBAR ──────────────────────────────── */
 #topbar{position:sticky;top:0;z-index:200;background:rgba(7,11,15,.96);
   backdrop-filter:blur(16px);border-bottom:1px solid var(--ln);
-  display:flex;align-items:stretch;height:50px;overflow:visible;}
+  display:flex;align-items:stretch;min-height:50px;height:auto;overflow:visible;}
 .logo{display:flex;align-items:center;padding:0 22px;border-right:1px solid var(--ln);gap:10px;flex-shrink:0;}
 .logo-mark{font-family:var(--f0);font-size:17px;font-weight:800;letter-spacing:3px;color:var(--c0);}
 .logo-mark span{color:var(--grn);}
